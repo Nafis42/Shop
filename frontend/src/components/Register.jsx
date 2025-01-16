@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 
 function Register() {
@@ -7,6 +7,9 @@ function Register() {
     const [fullname, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [err,setErr]=useState('');
+
+    const navigate=useNavigate();
 
 
     const handleRegister=async (e)=>{
@@ -20,17 +23,19 @@ function Register() {
                 email,
                 password,
             });
-            console.log('Registration successful:', response.data);
-            // Handle success (e.g., redirect to login or show a success message)
+            if (response && response.data.success) {
+                navigate("/login");
+                console.log('Registration successful:', response.data);
+              }
         } catch (error) {
             console.error('There was an error registering:', error);
-            // Handle error (e.g., show an error message to the user)
+            setErr(error.response.data.message);
         }
 
     }
 
   return (
-    // const [username,setUsername]=useState();
+    
 
     <>
       <div className='flex items-center justify-center bg-gray-100 min-h-screen'>
@@ -64,6 +69,7 @@ function Register() {
                 <button type="submit" 
                 className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Register</button>
             </form>
+            {err && <p className="text-red-500 text-center mt-2">{err}</p>}
             <p className="mt-4 text-center">
                 Already Registered? <Link to={"/login"} className="text-blue-500 hover:underline">Click Here</Link>
             </p>

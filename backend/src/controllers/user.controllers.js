@@ -1,6 +1,7 @@
 import { User } from "../models/user.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 
@@ -69,6 +70,10 @@ const registerUser= async (req,res)=>{
 
     } catch (error) {
         console.log(error)
+        if (error instanceof ApiError) {
+            // Automatically serialize the ApiError into JSON
+            return res.status(error.statusCode).json(error);
+          }
         return res.status(500).json(
             new ApiError(500,"Something went wrong while registering")
         )
@@ -82,6 +87,9 @@ const loginUser= async (req,res)=>{
     
         if(!(username || email)){
             throw new ApiError(400,"Username or email is required")
+            // return res.status(400).json(
+            //     new ApiError(400,"Username or email is required")
+            // )
         }
     
         //find the user
@@ -90,11 +98,18 @@ const loginUser= async (req,res)=>{
         })
         if(!user){
             throw new ApiError(404,"User doesn't exist")
+            // return res.status(404).json(
+            //     new ApiError(404,"User doesn't exist")
+            // )
         }
     
         const passwordCheck= await user.isPasswordCorrect(password)
         if(!passwordCheck){
             throw new ApiError(401,"Password is invalid")
+            console.log("uffff")
+            // return res.status(401).json(
+            //     new ApiError(401,"Password is invalid")
+            // )
         }
     
         const {accessToken,refreshToken}=await generateAccessandRefreshToken(user._id)
@@ -113,6 +128,10 @@ const loginUser= async (req,res)=>{
         ))
     } catch (error) {
         console.log(error)
+        if (error instanceof ApiError) {
+            // Automatically serialize the ApiError into JSON
+            return res.status(error.statusCode).json(error);
+          }
         return res.status(500).json(
             new ApiError(500,"Something went wrong while login")
         )
@@ -193,6 +212,10 @@ const refreshAccessToken= async(req,res)=>{
             )
         )
     } catch (error) {
+        if (error instanceof ApiError) {
+            // Automatically serialize the ApiError into JSON
+            return res.status(error.statusCode).json(error);
+          }
         return res.status(500).json(
             new ApiError(500,"Something went wrong while logout")
         )
