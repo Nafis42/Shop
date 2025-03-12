@@ -13,7 +13,6 @@ function Header() {
 
   const handleLoginButton=()=>{
     navigate("/login");
-
   }
   const handleLogout = () => {
     dispatch(logout()); // Dispatch logout action to update Redux state
@@ -33,8 +32,10 @@ function Header() {
                 <a href="#about" className="text-gray-700 hover:text-blue-500">About</a>
                 <a href="#contact" className="text-gray-700 hover:text-blue-500">Contact</a> */}
                 <Link to="/" className="text-gray-700 hover:text-blue-500">Home</Link>
+                <Link to="#" className="text-gray-700 hover:text-blue-500">Categories</Link>
                 <Link to="#" className="text-gray-700 hover:text-blue-500">About</Link>
                 <Link to="#" className="text-gray-700 hover:text-blue-500">Contact</Link>
+                
             </nav>
             <div className="flex space-x-5 items-center ">
                 {/* <button className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700">Shop Now</button> */}

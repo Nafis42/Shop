@@ -23,8 +23,13 @@ function Login() {
                 password
             })
             dispatch(loginSuccess(res.data));
-            console.log("Logged in successfully",res.data)
-            navigate("/");
+            console.log("Logged in successfully",res.data);
+            const userRole = res.data?.data?.user?.role;
+            if (userRole === "admin") {
+                navigate("/admin");
+            } else {
+                navigate("/");
+            }
 
         } catch (error) {
             dispatch(loginFailure(error.response.data.message));
