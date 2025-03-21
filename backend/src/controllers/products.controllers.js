@@ -139,6 +139,7 @@ const updateProduct=async(req,res)=>{
             quantity: quantity || product.quantity,
             shipping: shipping || product.shipping,
         };
+        console.log(updateProduct)
 
         // Check if a new photo is provided
         if (req.files?.photo) {
