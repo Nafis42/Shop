@@ -26,3 +26,21 @@ export const verifyJWT= async (req,res,next)=>{
     }
 
 }
+
+export const isAdmin = (req, res, next) => {
+    try {
+        // Ensure the user is authenticated first
+        if (!req.user) {
+            return next(new ApiError(401, "no req.user"));
+        }
+
+        // Check if user is an admin
+        if (req.user.role !== "admin") {
+            return next(new ApiError(403, "Access denied. Admins only."));
+        }
+
+        next(); // User is an admin, proceed
+    } catch (error) {
+        next(new ApiError(500, "Internal Server Error"));
+    }
+};
