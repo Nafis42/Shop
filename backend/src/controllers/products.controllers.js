@@ -1,7 +1,8 @@
-import { Products } from "../models/products.model";
+import { Products } from "../models/products.model.js";
 import slugify from "slugify";
-import { uploadOnCloudinary } from "../utils/cloudinary";
-import { ApiError } from "../utils/ApiError";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { ApiError } from "../utils/ApiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
 
 const createProduct=async(req,res)=>{
     try {
@@ -22,15 +23,18 @@ const createProduct=async(req,res)=>{
         if(!quantity){
             throw new ApiError(400,"Please enter the quantity")
         }
+        // console.log(req.files);
 
         const photoLocalPath = req.files?.photo[0]?.path;
         if (!photoLocalPath) {
             throw new ApiError(400, "Photo file is required")
         }
-        const photo=uploadOnCloudinary(photoLocalPath);
+        // console.log(photoLocalPath);
+        const photo=await uploadOnCloudinary(photoLocalPath);
         if(!photo) {
             throw new ApiError(400,"Problem in uploading photo in cloudinary")
         }
+        // console.log(photo);
         const product=await Products.create({
             name,
             slug:slugify(name),
@@ -92,6 +96,32 @@ const getProducts=async(req,res)=>{
     }
 }
 
+const getSingleProduct = async (req, res) => {
+    try {
+        const { id } = req.params;
+        console.log(id);
+
+        const product = await Products.findById(id).populate("category");
+
+        if (!product) {
+            throw new ApiError(404, "Product not found");
+        }
+
+        return res.status(200).json(
+            new ApiResponse(200, product, "Product fetched successfully")
+        );
+    } catch (error) {
+        console.error(error);
+        if (error instanceof ApiError) {
+            return res.status(error.statusCode).json(error);
+        }
+        return res.status(500).json(
+            new ApiError(500, "Something went wrong while fetching product")
+        );
+    }
+};
+
+
 const deleteProduct = async (req, res, next) => {
     try {
         const { id } = req.params; // Get product ID from request URL
@@ -128,6 +158,7 @@ const updateProduct=async(req,res)=>{
         if (!product) {
             throw new ApiError(404, "Product not found");
         }
+        console.log(product);
 
         // Check if a new name is provided and update the slug accordingly
         const updatedData = {
@@ -144,7 +175,7 @@ const updateProduct=async(req,res)=>{
         // Check if a new photo is provided
         if (req.files?.photo) {
             const photoLocalPath = req.files.photo[0].path;
-            const photo = uploadOnCloudinary(photoLocalPath);
+            const photo = await uploadOnCloudinary(photoLocalPath);
             if (!photo) {
                 throw new ApiError(400, "Problem uploading photo to Cloudinary");
             }
@@ -170,4 +201,4 @@ const updateProduct=async(req,res)=>{
     }
 }
 
-export {createProduct,getProducts,deleteProduct,updateProduct}
+export {createProduct,getProducts,deleteProduct,updateProduct,getSingleProduct}

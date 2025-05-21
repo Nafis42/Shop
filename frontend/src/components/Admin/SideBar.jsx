@@ -11,6 +11,15 @@ const SideBar = () => {
             <ul className="space-y-4">
                 <li>
                     <Link
+                        to="create-category"
+                        className="flex items-center p-2 rounded-lg hover:bg-blue-600 transition duration-200 ease-in-out"
+                    >
+                        <FiPlusCircle className="mr-2 text-xl" />
+                        <span>Create Category</span>
+                    </Link>
+                </li>
+                <li>
+                    <Link
                         to="add-item"
                         className="flex items-center p-2 rounded-lg hover:bg-blue-600 transition duration-200 ease-in-out"
                     >

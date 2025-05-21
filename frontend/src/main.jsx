@@ -16,7 +16,8 @@ import AddItem from './components/Admin/AddItem.jsx'
 import ListItems from './components/Admin/ListItems.jsx'
 import Orders from './components/Admin/Orders.jsx'
 import AdminRoute from '../Utils/AdminRoute.jsx'
-
+import UpdateProduct from './components/Admin/UpdateProduct.jsx'
+import Category from './components/Admin/Category.jsx'
 
 const router= createBrowserRouter(
   createRoutesFromElements(
@@ -29,9 +30,11 @@ const router= createBrowserRouter(
       <Route path="admin" element={<AdminRoute />}>
                 <Route element={<AdminHome />}>
                     <Route index element={<ListItems />} /> {/* Default Admin Page */}
+                    <Route path="create-category" element={<Category/>} />
                     <Route path="add-item" element={<AddItem />} />
                     <Route path="list-items" element={<ListItems />} />
                     <Route path="orders" element={<Orders />} />
+                    <Route path="update-product/:id" element={<UpdateProduct />} />
                 </Route>
             </Route>
     </Route>
