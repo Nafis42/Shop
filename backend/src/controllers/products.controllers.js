@@ -17,8 +17,8 @@ const createProduct=async(req,res)=>{
         if(!price){
             throw new ApiError(400,"Please enter the price")
         }
-        if(!category){
-            throw new ApiError(400,"Please enter the category")
+        if(!category || !Array.isArray(category) || category.length === 0){
+            throw new ApiError(400,"Please select at least one category")
         }
         if(!quantity){
             throw new ApiError(400,"Please enter the quantity")

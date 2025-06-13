@@ -7,7 +7,7 @@ const AddItem = () => {
     name: '',
     description: '',
     price: '',
-    category: '', 
+    category: [], 
     quantity: '',
     shipping: false,
     photo: null,
@@ -39,7 +39,13 @@ const AddItem = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setProductData({ ...productData, [name]: value });
+        if (name === 'category') {
+            // Convert the selected options to an array of values
+            const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
+            setProductData({ ...productData, [name]: selectedOptions });
+        } else {
+            setProductData({ ...productData, [name]: value });
+        }
     };
 
     const handleFileChange = (e) => {
@@ -119,15 +125,16 @@ const AddItem = () => {
                         value={productData.category} 
                         onChange={handleChange}
                         required
+                        multiple
                         className="block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
                     >
-                      <option value="" disabled>Select Category</option>
                         {categories?.map((c) => (
-                  <option key={c._id} value={c._id}>
-                    {c.name}
-                  </option>
-                ))}
+                            <option key={c._id} value={c._id}>
+                                {c.name}
+                            </option>
+                        ))}
                     </select>
+                    <p className="text-sm text-gray-500 mt-1">Hold Ctrl (Windows) or Command (Mac) to select multiple categories</p>
                 </div>
                 <div>
                     <input 

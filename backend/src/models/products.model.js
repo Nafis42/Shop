@@ -20,7 +20,7 @@ const productSchema=new Schema(
           required: true,
         },
         category: {
-          type: mongoose.ObjectId,
+          type: [mongoose.ObjectId],
           ref: "Category",
           required: true,
         },
