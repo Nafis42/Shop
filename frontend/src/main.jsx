@@ -18,13 +18,16 @@ import Orders from './components/Admin/Orders.jsx'
 import AdminRoute from '../Utils/AdminRoute.jsx'
 import UpdateProduct from './components/Admin/UpdateProduct.jsx'
 import Category from './components/Admin/Category.jsx'
+import HomePage from './pages/HomePage.jsx'
+import ProductDetail from './pages/ProductDetail.jsx'
 
 const router= createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<App/>}>
-      <Route path='' element={<Home/>}/>
+      <Route path='' element={<HomePage/>}/>
       <Route path='/register' element={<Register/>}/>
       <Route path='/login' element={<Login/>}/>
+      <Route path='/product/:id' element={<ProductDetail/>}/>
 
       {/* Protect Admin Routes */}
       <Route path="admin" element={<AdminRoute />}>
